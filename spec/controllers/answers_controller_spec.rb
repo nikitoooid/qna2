@@ -35,7 +35,8 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     it 'redirects to question show' do
-      expect{ delete :destroy, params: { id: answer } }.to redirect_to question
+      delete :destroy, params: { id: answer }
+      expect(response).to redirect_to question
     end
   end
 end

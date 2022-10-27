@@ -15,13 +15,8 @@ class AnswersController < ApplicationController
   def destroy
     @answer = Answer.find(params[:id])
 
-    if current_user.author_of?(@answer)
-      @answer.destroy
-      redirect_to question_path(@answer.question), notice: 'Your answer successfully deleted.'
-    else
-      flash.now[:alert] = "You don't have enough permissions to delete this answer!"
-      render 'questions/show'
-    end
+    @answer.destroy
+    redirect_to question_path(@answer.question), notice: 'Your answer successfully deleted.'
   end
 
   private
