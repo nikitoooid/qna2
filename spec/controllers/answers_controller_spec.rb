@@ -1,12 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, user: user) }
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'saves a new answer in the database' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer), user_id: user } }.to change(question.answers, :count).by(1)
       end
       it 'redirects to question show' do
         post :create, params: { question_id: question, answer: attributes_for(:answer) }
@@ -28,15 +31,25 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:answer) { create(:answer, question: question) }
-    
-    it 'deletes the answer' do
-      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+    let!(:answer) { create(:answer, question: question, user: user) }
+
+    context 'authenticated user' do
+      before { login(user) }
+
+      it 'deletes the answer' do
+        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to question show' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question
+      end
     end
 
-    it 'redirects to question show' do
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to question
+    context 'unauthenticated user' do
+      it 'not deletes the answer' do
+        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+      end
     end
   end
 end
