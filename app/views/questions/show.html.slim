@@ -2,16 +2,18 @@ h1= @question.title
 p= @question.body
 
 - if current_user&.author_of?(@question)
-    = link_to 'Delete question', question_path(@question), method: :delete
+	= link_to 'Delete question', question_path(@question), method: :delete
 
-= render @question.answers
+.answers
+	= render @question.answers
 
-- if @answer.errors.present?
-    = render "shared/errors", resource: @answer
+.answer-errors
+	- if @answer.errors.present?
+		= render "shared/errors", resource: @answer
 
 = form_with model: [@question, @answer] do |f|
 
-    = f.label :body, 'Answer the question'
-    = f.text_area :body
+  = f.label :body, 'Answer the question'
+  = f.text_area :body
 
-    = f.submit 'Answer'
+  = f.submit 'Answer'

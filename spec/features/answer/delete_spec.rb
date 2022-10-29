@@ -21,8 +21,11 @@ feature 'User can delete the answer', %{
     scenario 'tries to delete his answer' do
       click_link 'Delete answer', href: "/answers/#{answer.id}"
       
+      expect(current_path).to eq question_path(question)
       expect(page).to have_content 'Your answer successfully deleted'
-      expect(page).not_to have_content answer.body
+      within '.answers' do
+        expect(page).not_to have_content answer.body
+      end
     end
 
     scenario "tries to delete someone else's answer" do
