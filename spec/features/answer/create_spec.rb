@@ -4,33 +4,31 @@ feature 'User can create answer to the question', %{
   In order to help another user to find a solution
   As an authenticated user
   I'd like to be able to create the answer on the question page
-} do
+}, js: true do
 
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     background do
       sign_in(user)
 
       visit question_path(question)
     end
 
-    scenario 'answers the question' do
+    scenario 'answers the question', js: true do
       fill_in 'Answer the question', with: 'Test answer'
       click_on 'Answer'
 
-      expect(current_path).to eq question_path(question)
-      expect(page).to have_content 'Your answer successfully created.'
       within '.answers' do
         expect(page).to have_content 'Test answer'
       end
     end
 
-    scenario 'answers the question with errors' do
+    scenario 'answers the question with errors', js: true do
       click_on 'Answer'
 
-      expect(page).to have_content "Your answer not created!"
+      expect(page).to have_content "Body can't be blank"
     end
   end
 
