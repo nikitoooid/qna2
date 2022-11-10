@@ -19,10 +19,6 @@ class AnswersController < ApplicationController
 
     if current_user.author_of?(@answer)
       @answer.destroy
-      redirect_to question_path(@answer.question), notice: 'Your answer successfully deleted.'
-    else
-      flash.now[:alert] = "You don't have enough permissions to delete this answer!"
-      render 'questions/show'
     end
   end
 
