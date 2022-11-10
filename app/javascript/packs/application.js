@@ -8,6 +8,7 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import "utilities/answer_editing.js"
+import "utilities/question_editing.js"
 
 Rails.start()
 Turbolinks.start()
