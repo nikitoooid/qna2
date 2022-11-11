@@ -1,0 +1,8 @@
+document.querySelector('.answer-errors').innerHTML = "<%= render "shared/errors", resource: @answer %>"
+
+<% if @answer.persisted? %>
+  document.querySelector('.answers').innerHTML = ""
+
+  document.querySelector('.answers').insertAdjacentHTML( 'beforeend', "<%= j render 'answers/best_answer', answer: @question.best_answer %>")
+  document.querySelector('.answers').insertAdjacentHTML( 'beforeend', "<%= j render @answers %>")
+<% end %>

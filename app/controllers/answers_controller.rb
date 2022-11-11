@@ -1,35 +1,38 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_question, only: [:create]
+  before_action :set_answer, only: [:update, :destroy, :mark_as_best]
 
   def create
+    @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     current_user.answers.push @answer
     
-    if @answer.save
-      redirect_to question_path(@question), notice: 'Your answer successfully created.'
-    else
-      flash.now[:alert] = "Your answer not created!"
-      render 'questions/show'
-    end
+    @answer.save
+  end
+
+  def update
+    @answer.update(answer_params)
   end
 
   def destroy
-    @answer = Answer.find(params[:id])
-
     if current_user.author_of?(@answer)
       @answer.destroy
-      redirect_to question_path(@answer.question), notice: 'Your answer successfully deleted.'
-    else
-      flash.now[:alert] = "You don't have enough permissions to delete this answer!"
-      render 'questions/show'
     end
+  end
+
+  def mark_as_best
+    if current_user.author_of?(@answer)
+      @answer.mark_as_best
+    end
+
+    @question = @answer.question
+    @answers = @question.answers.where.not(id: @question.best_answer_id)
   end
 
   private
 
-  def set_question
-    @question = Question.find(params[:question_id])
+  def set_answer
+    @answer = Answer.find(params[:id])
   end
 
   def answer_params

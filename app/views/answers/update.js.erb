@@ -1,0 +1,7 @@
+document.querySelector('.answer-errors').innerHTML = "<%= render "shared/errors", resource: @answer %>"
+
+<% unless @answer.errors.present? %>
+  document.querySelector(`.answer[data-id="<%= @answer.id %>"] .answer-body`).innerHTML = "<%= j @answer.body %>"
+  document.querySelector(`.answer[data-id="<%= @answer.id %>"] .edit-answer-link`).classList.remove('hidden')
+  document.querySelector(`#edit-answer-<%= @answer.id %>`).classList.add('hidden')
+<% end %>

@@ -1,0 +1,4 @@
+- if answer.present? && answer.persisted?
+  div class="answer best-answer" data-id="#{answer.id}"
+    h3 Best answer!
+    p.answer-body = answer.body

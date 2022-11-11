@@ -33,11 +33,10 @@ group :development do
 end
 
 group :test do
-  # gem "capybara"
-  gem "capybara-wsl"
+  gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
   gem 'shoulda-matchers', '~> 5.0'
   gem 'rails-controller-testing'
-  gem 'launchy'
+  # gem 'launchy'
 end
