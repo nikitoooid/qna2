@@ -79,7 +79,7 @@ feature 'User can edit his question', %q{
       expect(page).to_not have_link 'Edit'
     end
 
-    scenario "tries to edit someone else's question attachment" do
+    scenario "tries to delete someone else's question attachment" do
       another_file
       visit question_path(another_question)
 

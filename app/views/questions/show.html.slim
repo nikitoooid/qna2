@@ -6,8 +6,6 @@ p.question-body = @question.body
 .question-files
   - if @question.files.attached?
     = render @question.files
-    / - @question.files.each do |file|
-    /   = link_to file.filename.to_s, url_for(file), class: 'question-file'
 
 - if current_user&.author_of?(@question)
   = link_to '#', class: 'edit-question-link'

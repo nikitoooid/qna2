@@ -5,9 +5,9 @@ document.querySelector('.answer-errors').innerHTML = "<%= render "shared/errors"
   document.querySelector(`.answer[data-id="<%= @answer.id %>"] .answer-files`).innerHTML = ""
 
   <% if @answer.files.attached? %>
-    <% @answer.files.each do |file| %>
-      document.querySelector(`.answer[data-id="<%= @answer.id %>"] .answer-files`).insertAdjacentHTML( 'beforeend', "<%= j link_to file.filename.to_s, url_for(file), class: 'answer-file' %>")
-    <% end %>
+    let files = document.querySelector('.answer-files')
+    files.innerHTML = ""
+    files.insertAdjacentHTML( 'beforeend', "<%= j render @answer.files %>")
   <%end%>
 
   document.querySelector(`.answer[data-id="<%= @answer.id %>"] .edit-answer-link`).classList.remove('hidden')
