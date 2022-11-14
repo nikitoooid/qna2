@@ -19,6 +19,6 @@
           = f.text_area :body
         p
           = f.label :attach_files
-          = f.file_field :attach_files, multiple: true
+          = f.file_field :attach_files, multiple: true, direct_upload: true
         p
           = f.submit 'Save'
