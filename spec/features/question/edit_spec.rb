@@ -24,6 +24,14 @@ feature 'User can edit his question', %q{
       
       fill_in 'Body', with: 'edited question'
     end
+    given(:file) do
+      question.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"), filename: "Test file")
+      question.files.last
+    end
+    given(:another_file) do
+      another_question.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"), filename: "Test file")
+      another_question.files.last
+    end
 
     background do
       sign_in(user)
@@ -48,6 +56,14 @@ feature 'User can edit his question', %q{
       expect(page).to have_link 'spec_helper.rb'
     end
 
+    scenario 'deletes the question attachment' do
+      file
+      visit question_path(question)
+      click_link '| Delete', href: "/attachments/#{file.id}"
+
+      expect(page).to have_content 'Test file'
+    end
+
     scenario 'edit his question with errors' do
       visit question_path(question)
 
@@ -61,6 +77,14 @@ feature 'User can edit his question', %q{
     scenario "tries to edit someone else's question" do
       visit question_path(another_question)
       expect(page).to_not have_link 'Edit'
+    end
+
+    scenario "tries to edit someone else's question attachment" do
+      another_file
+      visit question_path(another_question)
+
+      expect(page).to have_content 'Test file'
+      expect(page).to_not have_link '| Delete', href: "/attachments/#{another_file.id}"
     end
   end
 end
