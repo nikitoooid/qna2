@@ -11,4 +11,13 @@ RSpec.describe Question, type: :model do
   it 'have many attached files' do
     expect(Question.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
+
+  describe '#attach_files=' do
+    let(:question) { Question.new }
+
+    it 'attach new files to existed question' do
+      question.attach_files = {io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'TestFile'}
+      expect(question.files.last.filename.to_s).to eq 'TestFile'
+    end
+  end
 end 

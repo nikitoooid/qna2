@@ -18,20 +18,34 @@ feature 'User can edit his question', %q{
 
     given(:another_user) { create(:user) }
     given(:another_question) { create(:question, user: another_user) }
+    given(:edit_question) do
+      visit question_path(question)
+      click_on 'Edit'
+      
+      fill_in 'Body', with: 'edited question'
+    end
 
     background do
       sign_in(user)
     end
 
     scenario 'edit his question with valid attributes' do
-      visit question_path(question)
-
-      click_on 'Edit'
-      fill_in 'question[body]', with: 'edited question'
+      edit_question
 
       expect(page).to_not have_content question.body
       expect(page).to have_content 'edited question'
       expect(page).to_not have_selector 'textarea'
+    end
+
+    scenario 'edit his question with valid attributes and files' do
+      edit_question
+      attach_file 'Attach files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+
+      expect(page).to_not have_content question.body
+      expect(page).to have_content 'edited question'
+      expect(page).to_not have_selector 'textarea'
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
     end
 
     scenario 'edit his question with errors' do

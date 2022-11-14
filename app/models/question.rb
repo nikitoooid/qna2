@@ -7,4 +7,8 @@ class Question < ApplicationRecord
 
   validates :title, presence: true
   validates :body, presence: true
+
+  def attach_files=(attachables)
+    files.attach(attachables)
+  end
 end
