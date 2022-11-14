@@ -20,4 +20,13 @@ RSpec.describe Answer, type: :model do
       expect(answer.question.best_answer).to eq answer
     end
   end
+
+  describe '#attach_files=' do
+    let(:answer) { Answer.new }
+
+    it 'attach new files to existed answer' do
+      answer.attach_files = {io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'TestFile'}
+      expect(answer.files.last.filename.to_s).to eq 'TestFile'
+    end
+  end
 end

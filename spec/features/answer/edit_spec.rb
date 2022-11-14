@@ -21,6 +21,10 @@ feature 'User can edit his answer', %q{
 
     given(:another_user) { create(:user) }
     given!(:another_answer) { create(:answer, question: question, user: another_user) }
+    given(:edit_answer) do
+      click_on 'Edit'
+      fill_in 'answer[body]', with: 'edited answer'
+    end
 
     background do
       sign_in(user)
@@ -29,8 +33,19 @@ feature 'User can edit his answer', %q{
 
     scenario 'edit his answer with valid attributes' do
       within (".answers .answer[data-id='#{answer.id}']") do
-        click_on 'Edit'
-        fill_in 'answer[body]', with: 'edited answer'
+        edit_answer
+        click_on 'Save'
+
+        expect(page).to_not have_content answer.body
+        expect(page).to have_content 'edited answer'
+        expect(page).to_not have_selector 'textarea'
+      end
+    end
+
+    scenario 'edit his answer with valid attributes and files' do
+      within (".answers .answer[data-id='#{answer.id}']") do
+        edit_answer
+        attach_file 'Attach files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
         click_on 'Save'
 
         expect(page).to_not have_content answer.body

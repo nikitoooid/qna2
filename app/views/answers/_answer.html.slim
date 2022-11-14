@@ -2,9 +2,10 @@
   div class="answer" data-id="#{answer.id}"
     p.answer-body = answer.body
 
-    - if answer.files.attached?
-      - answer.files.each do |file|
-        p.answer-file = link_to file.filename.to_s, url_for(file)
+    .answer-files
+      - if answer.files.attached?
+        - answer.files.each do |file|
+          p.answer-file = link_to file.filename.to_s, url_for(file)
 
     - if current_user&.author_of?(answer.question)
       = link_to 'Mark as best', mark_as_best_answer_path(answer), method: :patch, remote: true
@@ -14,6 +15,11 @@
       = link_to 'Delete answer', answer_path(answer), method: :delete, remote: true
     
       = form_with model: answer, local: false, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-        = f.label :body
-        = f.text_area :body
-        = f.submit 'Save'
+        p
+          = f.label :body
+          = f.text_area :body
+        p
+          = f.label :attach_files
+          = f.file_field :attach_files, multiple: true
+        p
+          = f.submit 'Save'
