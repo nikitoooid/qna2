@@ -7,7 +7,7 @@ class Answer < ApplicationRecord
   validates :body, presence: true
 
   def mark_as_best
-    self.question.update(best_answer_id: self.id)
+    question.update(best_answer_id: id)
   end
 
   def attach_files=(attachables)

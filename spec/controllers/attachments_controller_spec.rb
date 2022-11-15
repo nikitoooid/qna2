@@ -6,13 +6,13 @@ RSpec.describe AttachmentsController, type: :controller do
 
   describe 'DELETE #remove_file' do
     let!(:file) do
-      question.files.attach(io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: "Test file")
+      question.files.attach(io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'Test file')
       question.files.last
     end
 
-    let(:remove_attachment){ delete :destroy, params: { id: file }, format: :js }
+    let(:remove_attachment) { delete :destroy, params: { id: file }, format: :js }
 
-    context 'question author' do
+    context 'with question author' do
       before { login(user) }
 
       it 'deletes file from database' do
@@ -25,13 +25,13 @@ RSpec.describe AttachmentsController, type: :controller do
       end
     end
 
-    context "another user" do
+    context 'with another user' do
       let(:another_user) { create(:user) }
 
       before { login(another_user) }
 
       it 'not deletes the file' do
-        expect { remove_attachment }.to_not change(question.files, :count)
+        expect { remove_attachment }.not_to change(question.files, :count)
       end
 
       it 'renders destroy view' do

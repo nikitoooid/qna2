@@ -17,7 +17,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'returns false if user is not creator of the object' do
-      expect(another_user).to_not be_author_of(object)
+      expect(another_user).not_to be_author_of(object)
     end
   end
 end

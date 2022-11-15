@@ -27,9 +27,10 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { login(user) }
-
-    before { get :new }
+    before do
+      login(user)
+      get :new
+    end
 
     it 'renders new veiw' do
       expect(response).to render_template :new
@@ -52,7 +53,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not save the question' do
-        expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
+        expect { post :create, params: { question: attributes_for(:question, :invalid) } }.not_to change(Question, :count)
       end
 
       it 're-renders new view' do
@@ -82,7 +83,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not update the answer' do
         expect do
           patch :update, params: { id: question, question: attributes_for(:question, :invalid) }, format: :js
-        end.to_not change(question, :body)
+        end.not_to change(question, :body)
       end
 
       it 'renders update view' do
@@ -95,22 +96,22 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'DELETE #destroy' do
     let!(:question) { create(:question, user: user) }
 
-    context 'authenticated user' do
+    context 'when author is authenticated' do
       before { login(user) }
 
       it 'deletes the question' do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
       end
-  
+
       it 'redirects to index view' do
         delete :destroy, params: { id: question }
         expect(response).to redirect_to questions_path
       end
     end
 
-    context 'unauthenticated user' do
+    context 'when user is unauthenticated' do
       it 'not deletes the question' do
-        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+        expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
       end
     end
   end

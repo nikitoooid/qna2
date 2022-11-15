@@ -11,6 +11,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'saves a new answer in the database' do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer), user_id: user, format: :js } }.to change(question.answers, :count).by(1)
       end
+
       it 'render answer create js template' do
         post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
 
@@ -20,8 +21,9 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid), format: :js } }.to_not change(Answer, :count)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid), format: :js } }.not_to change(Answer, :count)
       end
+
       it 'render answer create js template' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid), format: :js }
 
@@ -33,7 +35,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'DELETE #destroy' do
     let!(:answer) { create(:answer, question: question, user: user) }
 
-    context 'authenticated user' do
+    context 'when author is authenticated' do
       before { login(user) }
 
       it 'deletes the answer' do
@@ -46,9 +48,9 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'unauthenticated user' do
+    context 'when user is unauthenticated' do
       it 'not deletes the answer' do
-        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { id: answer } }.not_to change(Answer, :count)
       end
     end
   end
@@ -75,7 +77,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not update the answer' do
         expect do
           patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
-        end.to_not change(answer, :body)
+        end.not_to change(answer, :body)
       end
 
       it 'renders update view' do
@@ -87,9 +89,9 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'PATCH #mark_as_best' do
     let!(:answer) { create(:answer, question: question, user: user) }
-    let(:mark_as_best_answer){ patch :mark_as_best, params: { id: answer }, format: :js }
+    let(:mark_as_best_answer) { patch :mark_as_best, params: { id: answer }, format: :js }
 
-    context 'author of the question' do
+    context 'when author of the question is authenticated' do
       before { login(user) }
 
       it "changes question's best answer" do
@@ -103,13 +105,13 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'another user' do
+    context 'when another user is authenticated' do
       let(:another_user) { create(:user) }
 
       before { login(another_user) }
 
       it "does not change question's best answer in database" do
-        expect { mark_as_best_answer }.to_not change(question, :best_answer_id)
+        expect { mark_as_best_answer }.not_to change(question, :best_answer_id)
       end
 
       it 'renders from mark_as_best view' do

@@ -9,6 +9,9 @@ AllCops:
     - 'bin/**/*'
 
 Metrics/LineLength:
+  Exclude:
+    - spec/**/*
+    - config/**/*
   Max: 100
 
 Metrics/BlockLength:
@@ -25,3 +28,28 @@ Style/Documentation:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Style/BlockComments:
+  Enabled: false
+
+Style/GlobalStdStream:
+  Enabled: false
+
+RSpec/ImplicitExpect:
+  Enabled: false
+
+Rails/FilePath:
+  Exclude:
+    - spec/**/*
+
+RSpec/MultipleExpectations:
+  Exclude:
+    - spec/features/**/*
+
+RSpec/ExampleLength:
+  Exclude:
+    - spec/**/*
+
+RSpec/MultipleMemoizedHelpers:
+  Exclude:
+    - spec/**/*

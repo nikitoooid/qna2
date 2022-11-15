@@ -7,7 +7,7 @@ RSpec.describe Answer, type: :model do
   it { should validate_presence_of :body }
 
   it 'have many attached files' do
-    expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+    expect(described_class.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
 
   describe '#mark_as_best' do
@@ -22,10 +22,10 @@ RSpec.describe Answer, type: :model do
   end
 
   describe '#attach_files=' do
-    let(:answer) { Answer.new }
+    let(:answer) { described_class.new }
 
     it 'attach new files to existed answer' do
-      answer.attach_files = {io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'TestFile'}
+      answer.attach_files = { io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'TestFile' }
       expect(answer.files.last.filename.to_s).to eq 'TestFile'
     end
   end

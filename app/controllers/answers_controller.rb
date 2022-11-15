@@ -1,12 +1,12 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: [:update, :destroy, :mark_as_best]
+  before_action :set_answer, only: %i[update destroy mark_as_best]
 
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     current_user.answers.push @answer
-    
+
     @answer.save
   end
 
@@ -15,15 +15,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@answer)
-      @answer.destroy
-    end
+    return unless current_user.author_of?(@answer)
+
+    @answer.destroy
   end
 
   def mark_as_best
-    if current_user.author_of?(@answer)
-      @answer.mark_as_best
-    end
+    @answer.mark_as_best if current_user.author_of?(@answer)
 
     @question = @answer.question
     @answers = @question.answers.where.not(id: @question.best_answer_id)
