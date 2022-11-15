@@ -1,0 +1,4 @@
+.file data-id="#{attachment.id}"
+  = link_to attachment.filename.to_s, url_for(attachment)
+  - if attachment.record.user == current_user
+    = link_to ' | Delete', attachment_path(attachment), method: :delete, remote: true

@@ -3,17 +3,27 @@
 h1.question-title = @question.title
 p.question-body = @question.body
 
+.question-files
+  - if @question.files.attached?
+    = render @question.files
+
 - if current_user&.author_of?(@question)
   = link_to '#', class: 'edit-question-link'
     = 'Edit'
 	= link_to 'Delete question', question_path(@question), method: :delete
 
   = form_with model: @question, local: false, class: 'hidden', html: { id: "edit-question" } do |f|
-    = f.label :title
-    = f.text_field :title
-    = f.label :body
-    = f.text_area :body
-    = f.submit 'Save'
+    p
+      = f.label :title
+      = f.text_field :title
+    p
+      = f.label :body
+      = f.text_area :body
+    p
+      = f.label :attach_files
+      = f.file_field :attach_files, multiple: true, direct_upload: true
+    p
+      = f.submit 'Save'
 
 .answers
   = render 'answers/best_answer', answer: @question.best_answer
@@ -23,8 +33,13 @@ p.question-body = @question.body
 	
 
 = form_with model: [@question, @answer], local: false, class: 'new-answer' do |f|
+  p
+    = f.label :body, 'Answer the question'
+    = f.text_area :body
 
-  = f.label :body, 'Answer the question'
-  = f.text_area :body
+  p
+    = f.label :files
+    = f.file_field :files, multiple: true, direct_upload: true
 
-  = f.submit 'Answer'
+  p
+    = f.submit 'Answer'

@@ -1,0 +1,3 @@
+<% unless @attachment.errors.present? %>
+  document.querySelector(`.file[data-id="<%= @attachment.id %>"]`).remove()
+<% end %>

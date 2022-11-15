@@ -2,3 +2,6 @@
   div class="answer best-answer" data-id="#{answer.id}"
     h3 Best answer!
     p.answer-body = answer.body
+
+    - if answer.files.attached?
+      = render answer.files

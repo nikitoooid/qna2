@@ -6,14 +6,27 @@ RSpec.describe Answer, type: :model do
 
   it { should validate_presence_of :body }
 
+  it 'have many attached files' do
+    expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+  end
+
   describe '#mark_as_best' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
     let(:answer) { create(:answer, user: user, question: question) }
 
-    it 'returns true if user is creator of the object' do
+    it 'set answer as best answer to the parent question' do
       answer.mark_as_best
       expect(answer.question.best_answer).to eq answer
+    end
+  end
+
+  describe '#attach_files=' do
+    let(:answer) { Answer.new }
+
+    it 'attach new files to existed answer' do
+      answer.attach_files = {io: File.open("#{Rails.root}/spec/rails_helper.rb"), filename: 'TestFile'}
+      expect(answer.files.last.filename.to_s).to eq 'TestFile'
     end
   end
 end

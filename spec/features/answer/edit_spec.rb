@@ -21,6 +21,18 @@ feature 'User can edit his answer', %q{
 
     given(:another_user) { create(:user) }
     given!(:another_answer) { create(:answer, question: question, user: another_user) }
+    given(:edit_answer) do
+      click_on 'Edit'
+      fill_in 'answer[body]', with: 'edited answer'
+    end
+    given(:file) do
+      answer.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"), filename: "Test file")
+      answer.files.last
+    end
+    given(:another_file) do
+      another_answer.files.attach(io: File.open("#{Rails.root}/spec/spec_helper.rb"), filename: "Test file")
+      another_answer.files.last
+    end
 
     background do
       sign_in(user)
@@ -29,13 +41,34 @@ feature 'User can edit his answer', %q{
 
     scenario 'edit his answer with valid attributes' do
       within (".answers .answer[data-id='#{answer.id}']") do
-        click_on 'Edit'
-        fill_in 'answer[body]', with: 'edited answer'
+        edit_answer
         click_on 'Save'
 
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
         expect(page).to_not have_selector 'textarea'
+      end
+    end
+
+    scenario 'edit his answer with valid attributes and files' do
+      within (".answers .answer[data-id='#{answer.id}']") do
+        edit_answer
+        attach_file 'Attach files', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+        click_on 'Save'
+
+        expect(page).to_not have_content answer.body
+        expect(page).to have_content 'edited answer'
+        expect(page).to_not have_selector 'textarea'
+      end
+    end
+
+    scenario 'deletes the answer attachment' do
+      file
+      visit question_path(question)
+      within (".answers .answer[data-id='#{answer.id}']") do
+        click_link '| Delete', href: "/attachments/#{file.id}"
+
+        expect(page).to have_content 'Test file'
       end
     end
 
@@ -53,6 +86,16 @@ feature 'User can edit his answer', %q{
     scenario "tries to edit someone else's answer" do
       within (".answers .answer[data-id='#{another_answer.id}']") do
         expect(page).to_not have_link 'Edit'
+      end
+    end
+
+    scenario "tries to delete someone else's question attachment" do
+      another_file
+      visit question_path(question)
+      
+      within (".answers .answer[data-id='#{another_answer.id}']") do
+        expect(page).to have_content 'Test file'
+        expect(page).to_not have_link '| Delete', href: "/attachments/#{another_file.id}"
       end
     end
   end
