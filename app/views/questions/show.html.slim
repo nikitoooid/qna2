@@ -7,6 +7,11 @@ p.question-body = @question.body
   - if @question.files.attached?
     = render @question.files
 
+- if @question.links.any?
+  .question-links
+    p Links:
+    ul = render @question.links
+
 - if current_user&.author_of?(@question)
   = link_to '#', class: 'edit-question-link'
     = 'Edit'

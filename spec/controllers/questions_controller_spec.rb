@@ -32,6 +32,14 @@ RSpec.describe QuestionsController, type: :controller do
       get :new
     end
 
+    it 'assigns a new Question to @question' do
+      expect(assigns(:question)).to be_a_new(Question)
+    end
+
+    it 'assigns a new Link to @question.links' do
+      expect(assigns(:question).links.first).to be_a_new(Link)
+    end
+
     it 'renders new veiw' do
       expect(response).to render_template :new
     end

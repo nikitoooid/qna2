@@ -13,6 +13,7 @@ class QuestionsController < ApplicationController
 
   def new
     @question = Question.new
+    @question.links.new # .build
   end
 
   def edit; end
@@ -48,6 +49,7 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [], attach_files: [])
+    params.require(:question).permit(:title, :body,
+                                     files: [], attach_files: [], links_attributes: %i[name url])
   end
 end
