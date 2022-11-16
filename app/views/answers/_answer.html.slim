@@ -6,6 +6,11 @@
       - if answer.files.attached?
         = render answer.files
 
+    - if answer.links.any?
+      .answer-links
+        p Links:
+        ul = render answer.links
+
     - if current_user&.author_of?(answer.question)
       = link_to 'Mark as best', mark_as_best_answer_path(answer), method: :patch, remote: true
 
