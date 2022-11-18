@@ -27,9 +27,11 @@ describe 'User can add links to question', "
 
   it 'User tries to add link with invalid params' do
     fill_in 'Link name', with: 'My gist'
+    fill_in 'Url', with: 'not valid url'
 
     click_on 'Ask'
 
     expect(page).not_to have_link 'My gist'
+    expect(page).to have_content 'Url is not valid'
   end
 end

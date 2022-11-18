@@ -29,6 +29,7 @@ describe 'User can add links to amswer', "
 
   it 'User tries to add link with invalid params', js: true do
     fill_in 'Link name', with: 'My gist'
+    fill_in 'Url', with: 'not valid url'
 
     click_on 'Answer'
 
