@@ -12,7 +12,11 @@ class Link < ApplicationRecord
   end
 
   def valid_url?(url)
-    url = URI.parse(url) rescue false
-    url.kind_of?(URI::HTTP) || url.kind_of?(URI::HTTPS)
+    url = begin
+      URI.parse(url)
+    rescue StandardError
+      false
+    end
+    url.is_a?(URI::HTTP) || url.is_a?(URI::HTTPS)
   end
 end

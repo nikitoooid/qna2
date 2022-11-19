@@ -13,9 +13,9 @@ gem 'turbolinks', '~> 5'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'webpacker', '~> 5.0'
 
+gem 'cocoon'
 gem 'devise'
 gem 'slim-rails'
-gem 'cocoon'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

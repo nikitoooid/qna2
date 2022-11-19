@@ -21,20 +21,20 @@ describe 'User can add links to amswer', "
     it 'user adds link', js: true do
       fill_in 'Link name', with: 'My gist'
       fill_in 'Url', with: gist_url
-  
+
       click_on 'Answer'
-  
+
       within '.answers' do
         expect(page).to have_link 'My gist', href: gist_url
       end
     end
-  
+
     it 'user tries to add link with invalid params', js: true do
       fill_in 'Link name', with: 'My gist'
       fill_in 'Url', with: 'not valid url'
-  
+
       click_on 'Answer'
-  
+
       expect(page).not_to have_link 'My gist'
     end
   end
@@ -48,23 +48,23 @@ describe 'User can add links to amswer', "
     end
 
     it 'user adds link', js: true do
-      within ".answers" do
+      within '.answers' do
         fill_in 'Link name', with: 'My gist'
         fill_in 'Url', with: gist_url
 
         click_on 'Save'
-  
+
         expect(page).not_to have_link 'My gist'
       end
     end
 
     it 'user tries to add link with invalid params', js: true do
-      within ".answers" do
+      within '.answers' do
         fill_in 'Link name', with: 'My gist'
         fill_in 'Url', with: 'not valid url'
-  
+
         click_on 'Save'
-  
+
         expect(page).not_to have_link 'My gist'
       end
     end
