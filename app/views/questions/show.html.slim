@@ -7,8 +7,8 @@ p.question-body = @question.body
   - if @question.files.attached?
     = render @question.files
 
-- if @question.links.any?
-  .question-links
+.question-links
+  - if @question.links.any?
     p Links:
     ul = render @question.links
 
@@ -27,6 +27,8 @@ p.question-body = @question.body
     p
       = f.label :attach_files
       = f.file_field :attach_files, multiple: true, direct_upload: true
+    .links
+      = render 'links/form', f: f
     p
       = f.submit 'Save'
 
