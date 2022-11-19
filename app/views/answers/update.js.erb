@@ -2,12 +2,17 @@ document.querySelector('.answer-errors').innerHTML = "<%= render "shared/errors"
 
 <% unless @answer.errors.present? %>
   document.querySelector(`.answer[data-id="<%= @answer.id %>"] .answer-body`).innerHTML = "<%= j @answer.body %>"
-  document.querySelector(`.answer[data-id="<%= @answer.id %>"] .answer-files`).innerHTML = ""
+  let files = document.querySelector(`.answer[data-id="<%= @answer.id %>"] .answer-files`)
+  let links = document.querySelector(`.answer[data-id="<%= @answer.id %>"] .answer-links`)
 
   <% if @answer.files.attached? %>
-    let files = document.querySelector('.answer-files')
     files.innerHTML = ""
     files.insertAdjacentHTML( 'beforeend', "<%= j render @answer.files %>")
+  <%end%>
+
+  <% if @answer.links.any? %>
+    links.innerHTML = ""
+    links.insertAdjacentHTML( 'beforeend', "<%= j render @answer.links %>")
   <%end%>
 
   document.querySelector(`.answer[data-id="<%= @answer.id %>"] .edit-answer-link`).classList.remove('hidden')

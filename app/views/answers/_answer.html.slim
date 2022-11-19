@@ -6,8 +6,8 @@
       - if answer.files.attached?
         = render answer.files
 
-    - if answer.links.any?
-      .answer-links
+    .answer-links
+      - if answer.links.any?
         p Links:
         ul = render answer.links
 
@@ -25,5 +25,7 @@
         p
           = f.label :attach_files
           = f.file_field :attach_files, multiple: true, direct_upload: true
+        .links
+          = render 'links/form', f: f
         p
           = f.submit 'Save'

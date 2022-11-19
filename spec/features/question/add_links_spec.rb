@@ -13,7 +13,7 @@ describe 'User can add links to question', "
     sign_in(user)
   end
 
-  describe 'When user creating the question' do
+  describe 'When user creates the question' do
     before do
       visit new_question_path
   
