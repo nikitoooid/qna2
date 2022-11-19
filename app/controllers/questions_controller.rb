@@ -15,6 +15,7 @@ class QuestionsController < ApplicationController
   def new
     @question = Question.new
     @question.links.new # .build
+    @question.trophy = Trophy.new
   end
 
   def edit; end
@@ -51,6 +52,7 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, files: [], attach_files: [],
-                                                    links_attributes: %i[name url])
+                                                    links_attributes: %i[name url],
+                                                    trophy_attributes: %i[name image])
   end
 end
