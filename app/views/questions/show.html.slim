@@ -7,6 +7,11 @@ p.question-body = @question.body
   - if @question.files.attached?
     = render @question.files
 
+.question-links
+  - if @question.links.any?
+    p Links:
+    ul = render @question.links
+
 - if current_user&.author_of?(@question)
   = link_to '#', class: 'edit-question-link'
     = 'Edit'
@@ -22,8 +27,15 @@ p.question-body = @question.body
     p
       = f.label :attach_files
       = f.file_field :attach_files, multiple: true, direct_upload: true
+    .links
+      = render 'links/form', f: f
     p
       = f.submit 'Save'
+
+.question-trophy
+  - if @question.trophy&.persisted?
+    p Trophy for this question:
+    = render @question.trophy
 
 .answers
   = render 'answers/best_answer', answer: @question.best_answer
@@ -40,6 +52,9 @@ p.question-body = @question.body
   p
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true
+  
+  .links
+    = render 'links/form', f: f
 
   p
     = f.submit 'Answer'

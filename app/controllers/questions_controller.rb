@@ -9,10 +9,13 @@ class QuestionsController < ApplicationController
   def show
     @answers = @question.answers.where.not(id: @question.best_answer_id)
     @answer = @question.answers.new
+    @answer.links.new
   end
 
   def new
     @question = Question.new
+    @question.links.new # .build
+    @question.trophy = Trophy.new
   end
 
   def edit; end
@@ -48,6 +51,8 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [], attach_files: [])
+    params.require(:question).permit(:title, :body, files: [], attach_files: [],
+                                                    links_attributes: %i[name url],
+                                                    trophy_attributes: %i[name image])
   end
 end

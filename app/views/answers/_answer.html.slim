@@ -6,6 +6,11 @@
       - if answer.files.attached?
         = render answer.files
 
+    .answer-links
+      - if answer.links.any?
+        p Links:
+        ul = render answer.links
+
     - if current_user&.author_of?(answer.question)
       = link_to 'Mark as best', mark_as_best_answer_path(answer), method: :patch, remote: true
 
@@ -20,5 +25,7 @@
         p
           = f.label :attach_files
           = f.file_field :attach_files, multiple: true, direct_upload: true
+        .links
+          = render 'links/form', f: f
         p
           = f.submit 'Save'

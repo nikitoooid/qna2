@@ -10,6 +10,12 @@ document.querySelector('.question-errors').innerHTML = "<%= render "shared/error
     files.insertAdjacentHTML( 'beforeend', "<%= j render @question.files %>")
   <%end%>
 
+  <% if @question.links.any? %>
+    let files = document.querySelector('.question-files')
+    files.innerHTML = ""
+    files.insertAdjacentHTML( 'beforeend', "<%= j render @question.links %>")
+  <%end%>
+
   document.querySelector('.edit-question-link').classList.remove('hidden')
   document.querySelector('#edit-question').classList.add('hidden')
 <% end %>

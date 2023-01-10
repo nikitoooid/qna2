@@ -1,0 +1,9 @@
+p Trophy for this question's best answer
+
+= f.fields_for :trophy do |t|
+  p
+    = t.label :name
+    = t.text_field :name
+  p
+    = t.label :image
+    = t.file_field :image
